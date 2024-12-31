@@ -34,3 +34,30 @@
 ;; Protocol Constants
 (define-constant MAX-TOKENS-PER-PORTFOLIO u10)
 (define-constant BASIS-POINTS u10000)                  ;; 100% = 10000 basis points
+
+;; Data Structures
+(define-map Portfolios
+    uint                                               ;; portfolio-id
+    {
+        owner: principal,
+        created-at: uint,
+        last-rebalanced: uint,
+        total-value: uint,
+        active: bool,
+        token-count: uint
+    }
+)
+
+(define-map PortfolioAssets
+    {portfolio-id: uint, token-id: uint}
+    {
+        target-percentage: uint,
+        current-amount: uint,
+        token-address: principal
+    }
+)
+
+(define-map UserPortfolios
+    principal
+    (list 20 uint)
+)
