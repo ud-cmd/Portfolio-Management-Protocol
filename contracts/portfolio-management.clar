@@ -91,3 +91,42 @@
         needs-rebalance: (> (- block-height (get last-rebalanced portfolio)) u144)
     }))
 )
+
+;; Private Functions
+
+;; Validates token ID within portfolio constraints
+(define-private (validate-token-id (portfolio-id uint) (token-id uint))
+    (let (
+        (portfolio (unwrap! (get-portfolio portfolio-id) false))
+    )
+    (and 
+        (< token-id MAX-TOKENS-PER-PORTFOLIO)
+        (< token-id (get token-count portfolio))
+        true
+    ))
+)
+
+;; Validates percentage is within valid range (0-10000 basis points)
+(define-private (validate-percentage (percentage uint))
+    (and (>= percentage u0) (<= percentage BASIS-POINTS))
+)
+
+;; Validates sum of portfolio percentages
+(define-private (validate-portfolio-percentages (percentages (list 10 uint)))
+    (fold check-percentage-sum percentages true)
+)
+
+;; Helper function for percentage validation
+(define-private (check-percentage-sum (current-percentage uint) (valid bool))
+    (and valid (validate-percentage current-percentage))
+)
+
+;; Adds portfolio ID to user's portfolio list
+(define-private (add-to-user-portfolios (user principal) (portfolio-id uint))
+    (let (
+        (current-portfolios (get-user-portfolios user))
+        (new-portfolios (unwrap! (as-max-len? (append current-portfolios portfolio-id) u20) ERR-USER-STORAGE-FAILED))
+    )
+    (map-set UserPortfolios user new-portfolios)
+    (ok true))
+)
