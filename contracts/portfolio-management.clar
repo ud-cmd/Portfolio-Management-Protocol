@@ -25,3 +25,12 @@
 (define-constant ERR-LENGTH-MISMATCH (err u108))      ;; Mismatch in input array lengths
 (define-constant ERR-USER-STORAGE-FAILED (err u109))   ;; Failed to update user storage
 (define-constant ERR-INVALID-TOKEN-ID (err u110))      ;; Invalid token ID in portfolio
+
+;; Protocol Configuration
+(define-data-var protocol-owner principal tx-sender)
+(define-data-var portfolio-counter uint u0)
+(define-data-var protocol-fee uint u25)                ;; 0.25% in basis points
+
+;; Protocol Constants
+(define-constant MAX-TOKENS-PER-PORTFOLIO u10)
+(define-constant BASIS-POINTS u10000)                  ;; 100% = 10000 basis points
