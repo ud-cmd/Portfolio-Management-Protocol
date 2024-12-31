@@ -238,3 +238,14 @@
     
     (ok true))
 )
+
+;; Protocol Administration
+
+;; Initializes or transfers protocol ownership
+(define-public (initialize (new-owner principal))
+    (begin
+        (asserts! (is-eq tx-sender (var-get protocol-owner)) ERR-NOT-AUTHORIZED)
+        (asserts! (not (is-eq new-owner tx-sender)) ERR-NOT-AUTHORIZED)
+        (var-set protocol-owner new-owner)
+        (ok true))
+)
